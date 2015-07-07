@@ -1,0 +1,22 @@
+---
+services:
+  gitlab:
+    git_url: git://github.com/pkallberg/gitlab
+    git_branch: master
+    ports:
+    - 80:80:443
+    tcp:
+    - 22:22
+    volumes:
+    - "/var/gitlab/data:/var/opt/gitlab"
+    - "/var/gitlab/logs:/var/log/gitlab"
+    - "/var/gitlab/configurations:/etc/gitlab"
+    health:
+      type: normal
+      endpoint: "/"
+      protocol: http
+      timeout: 60s
+      accept:
+      - '200'
+databases:
+- postgresql
