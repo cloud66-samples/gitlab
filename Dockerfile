@@ -17,7 +17,12 @@ RUN mkdir -p /opt/gitlab/sv/sshd/supervise \
     && ln -s /opt/gitlab/sv/sshd /opt/gitlab/service \
     && mkdir -p /var/run/sshd
 
+COPY entrypoint.sh /etc/gitlab/entrypoint.sh
+RUN chmod 755 /etc/gitlab/entrypoint.sh
+
 # Expose web & ssh
 EXPOSE 80 22
+
+#ENTRYPOINT ["/etc/gitlab/entrypoint.sh"]
 
 CMD sleep 3 && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
