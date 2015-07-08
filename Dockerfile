@@ -36,5 +36,6 @@ RUN cd /etc/gitlab \
 EXPOSE 80 22
 
 RUN mv /etc/gitlab/gitlab.rb /tmp/gitlab.rb
+COPY database.yml /opt/gitlab/embedded/service/gitlab-rails/config/database.yml
 
 CMD sleep 3 && mv /tmp/gitlab.rb /etc/gitlab/gitlab.rb && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
