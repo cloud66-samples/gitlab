@@ -29,4 +29,6 @@ RUN cd /etc/gitlab \
 # Expose web & ssh
 EXPOSE 80 22
 
-CMD sleep 3 && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
+RUN mv /etc/gitlab/gitlab.rb /tmp/gitlab.rb
+
+CMD sleep 3 && mv /tmp/gitlab.rb /etc/gitlab/gitlab.rb && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
