@@ -19,7 +19,7 @@ RUN mkdir -p /opt/gitlab/sv/sshd/supervise \
 
 RUN cd /etc/gitlab \
     && sed -i "s/^.*db_database.*$/gitlab_rails[\'db_database\'] = ENV[\"POSTGRESQL_DATABASE\"]/" gitlab.rb \
-    && sed -i "s/^.*external_url.*$/external_url ENV[\"WEB_ADDRESS\"]/" gitlab.rb \
+    && sed -i "s/^.*external_url.*$/external_url http:\/\/ENV[\"WEB_ADDRESS\"]/" gitlab.rb \
     && sed -i "s/^.*db_encoding.*$/gitlab_rails[\'db_encoding\'] = unicode/" gitlab.rb \
     && sed -i "s/^.*db_pool.*$/gitlab_rails[\'db_pool\'] = 10/" gitlab.rb \
     && sed -i "s/^.*db_username.*$/gitlab_rails[\'db_username\'] = ENV[\"POSTGRESQL_USERNAME\"]/" gitlab.rb \
