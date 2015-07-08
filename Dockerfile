@@ -23,6 +23,7 @@ RUN chmod 755 /etc/gitlab/entrypoint.sh
 # Expose web & ssh
 EXPOSE 80 22
 
-ENTRYPOINT ["/etc/gitlab/entrypoint.sh"]
+#ENTRYPOINT ["/etc/gitlab/entrypoint.sh"]
 
-#CMD sleep 3 && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
+CMD /etc/gitlab/entrypoint.sh
+CMD sleep 3 && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
