@@ -17,13 +17,19 @@ RUN mkdir -p /opt/gitlab/sv/sshd/supervise \
     && ln -s /opt/gitlab/sv/sshd /opt/gitlab/service \
     && mkdir -p /var/run/sshd
 
-COPY entrypoint.sh /etc/gitlab/entrypoint.sh
-RUN chmod 755 /etc/gitlab/entrypoint.sh
+#COPY entrypoint.sh /etc/gitlab/entrypoint.sh
+#RUN chmod 755 /etc/gitlab/entrypoint.sh
+
+RUN cd /etc/gitlab \
+    && sed -i "s/^.*db_database.*$/gitlab_rails[\'db_database\'] = ENV[\"POSTGRESQL_DATABASE\"]/" gitlab.rb \
+    && sed -i "s/^.*db_username.*$/gitlab_rails[\'db_username\'] = ENV[\"POSTGRESQL_USERNAME\"]/" gitlab.rb \
+    && sed -i "s/^.*db_password.*$/gitlab_rails[\'db_password\'] = ENV[\"POSTGRESQL_PASSWORD\"]/" gitlab.rb \
+    && sed -i "s/^.*db_host.*$/gitlab_rails[\'db_host\'] = ENV[\"POSTGRESQL_ADDRESS\"]/" gitlab.rb \
+    && sed -i "s/^.*db_port.*$/gitlab_rails[\'db_port\'] = "5432"/" gitlab.rb \ 
+    && sed -i "s/^.*redis_host.*$/gitlab_ci[\'redis_host\'] = ENV[\"REDIS_ADDRESS\"]/" gitlab.rb \
+    && sed -i "s/^.*redis_port.*$/gitlab_ci[\'redis_port\'] = "6379"/" gitlab.rb
 
 # Expose web & ssh
 EXPOSE 80 22
 
-#ENTRYPOINT ["/etc/gitlab/entrypoint.sh"]
-
-CMD /etc/gitlab/entrypoint.sh
 CMD sleep 3 && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
