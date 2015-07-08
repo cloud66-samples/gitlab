@@ -24,3 +24,5 @@ RUN chmod 755 /etc/gitlab/entrypoint.sh
 EXPOSE 80 22
 
 ENTRYPOINT ["/etc/gitlab/entrypoint.sh"]
+
+#CMD sleep 3 && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
