@@ -17,9 +17,6 @@ RUN mkdir -p /opt/gitlab/sv/sshd/supervise \
     && ln -s /opt/gitlab/sv/sshd /opt/gitlab/service \
     && mkdir -p /var/run/sshd
 
-#COPY entrypoint.sh /etc/gitlab/entrypoint.sh
-#RUN chmod 755 /etc/gitlab/entrypoint.sh
-
 RUN cd /etc/gitlab \
     && sed -i "s/^.*db_database.*$/gitlab_rails[\'db_database\'] = ENV[\"POSTGRESQL_DATABASE\"]/" gitlab.rb \
     && sed -i "s/^.*db_username.*$/gitlab_rails[\'db_username\'] = ENV[\"POSTGRESQL_USERNAME\"]/" gitlab.rb \
