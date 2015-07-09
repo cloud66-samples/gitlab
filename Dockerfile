@@ -27,7 +27,7 @@ RUN cd /etc/gitlab \
      && sed -i "s/^.*db_host.*$/gitlab_rails[\'db_host\'] = ENV[\"POSTGRESQL_ADDRESS\"]/" gitlab.rb \
      && sed -i "s/^.*db_port.*$/gitlab_rails[\'db_port\'] = \"5432\"/" gitlab.rb \ 
      && sed -i "s/^.*db_adapter.*$/gitlab_rails[\'db_adapter\'] = "postgresql"/" gitlab.rb \     
-#    && sed -i "s/^.*postgresql\['enable'\].*$/postgresql[\'enable\'] = false/" gitlab.rb \ 
+     && sed -i "s/^.*postgresql\['enable'\].*$/postgresql[\'enable\'] = false/" gitlab.rb \ 
      && sed -i "s/^.*redis\['enable'\].*$/redis[\'enable\'] = false/" gitlab.rb \
      && sed -i "s/^.*redis_host.*$/gitlab_rails[\'redis_host\'] = ENV[\"REDIS_ADDRESS\"]/" gitlab.rb \
      && sed -i "s/^.*redis_port.*$/gitlab_rails[\'redis_port\'] = "6379"/" gitlab.rb
