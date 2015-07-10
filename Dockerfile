@@ -41,6 +41,7 @@ RUN (echo "" \
 # Expose web & ssh
 EXPOSE 80 443 22
 
+RUN sed -i "s/^\.*external_url.*$/external_url ENV[\"SITE\"]/" /etc/gitlab/gitlab.rb
 RUN mv /etc/gitlab/gitlab.rb /tmp/gitlab.rb
 
 # Copy assets
