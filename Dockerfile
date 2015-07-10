@@ -36,7 +36,7 @@ RUN (echo "" \
      && echo "gitlab_rails['redis_host'] = ENV[\"REDIS_ADDRESS\"]" \
      && echo "gitlab_rails['redis_port'] = 6379" \
      && echo "postgresql['enable'] = false" \
-     && echo "redis['enable'] = false \
+     && echo "redis['enable'] = false" \
      && echo "gitlab_rails['gitlab_shell_ssh_port'] = 10022" \
      && echo "gitlab_rails['gitlab_ssh_host'] = 'ssh.host_example.com'") >> /etc/gitlab/gitlab.rb
 
