@@ -41,6 +41,8 @@ RUN (echo "" \
 # Expose web & ssh
 EXPOSE 80 443 22
 
+RUN mv /etc/gitlab/gitlab.rb /tmp/gitlab.rb
+
 # Copy assets
 COPY wrapper /usr/local/bin/wrapper
 RUN chmod 700 /usr/local/bin/wrapper
