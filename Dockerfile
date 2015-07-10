@@ -38,7 +38,7 @@ RUN (echo "" \
      && echo "postgresql['enable'] = false" \
      && echo "redis['enable'] = false" \
      && echo "gitlab_rails['gitlab_shell_ssh_port'] = 10022" \
-     && echo "gitlab_rails['gitlab_ssh_host'] = 'ssh.host_example.com'") >> /etc/gitlab/gitlab.rb
+     && echo "gitlab_rails['gitlab_ssh_host'] = ENV[\"SITE\"]") >> /etc/gitlab/gitlab.rb
 
 # Expose web & ssh
 EXPOSE 80 443 22
