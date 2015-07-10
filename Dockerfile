@@ -6,7 +6,8 @@ RUN apt-get update -q \
       ca-certificates \
       openssh-server \
       wget \
-      apt-transport-https
+      apt-transport-https \
+      nano
 
 # Download & Install GitLab
 # If you run GitLab Enterprise Edition point it to a location where you have downloaded it.
@@ -22,8 +23,23 @@ RUN mkdir -p /opt/gitlab/sv/sshd/supervise \
     && ln -s /opt/gitlab/sv/sshd /opt/gitlab/service \
     && mkdir -p /var/run/sshd
 
+# Prepare default configuration
+RUN (echo "" \
+     && echo "# Cloud 66 customizations below" \
+     && echo "gitlab_rails['db_adapter'] = 'postgresql'" \
+     && echo "gitlab_rails['db_encoding'] = 'unicode'" \
+     && echo "gitlab_rails['db_database'] = ENV[\"POSTGRESQL_DATABASE\"]" \
+     && echo "gitlab_rails['db_username'] = ENV[\"POSTGRESQL_USERNAME\"]" \
+     && echo "gitlab_rails['db_password'] = ENV[\"POSTGRESQL_PASSWORD\"]" \
+     && echo "gitlab_rails['db_host'] = ENV[\"POSTGRESQL_ADDRESS\"]" \
+     && echo "gitlab_rails['db_port'] = 5432" \
+     && echo "gitlab_rails['redis_host'] = ENV[\"REDIS_ADDRESS\"]" \
+     && echo "gitlab_rails['redis_port'] = 6379" \
+     && echo "postgresql['enable'] = false" \
+     && echo "redis['enable'] = false") >> /etc/gitlab/gitlab.rb
+
 # Expose web & ssh
-EXPOSE 80 22
+EXPOSE 80 443 22
 
 # Copy assets
 COPY wrapper /usr/local/bin/wrapper
