@@ -1,15 +1,20 @@
 FROM ubuntu:14.04
-MAINTAINER Philip Kallberg <philip@cloud66.com>
 
 # Install required packages
-RUN apt-get install -qy --no-install-recommends \
-      openssh-server \
+RUN apt-get update -q \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -qy --no-install-recommends \
       ca-certificates \
-      curl \
-    && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash \
-    && apt-get install -qy --no-install-recommends \
-      gitlab-ce=7.10.4~omnibus.1-1
+      openssh-server \
+      wget \
+      apt-transport-https
 
+# Download & Install GitLab
+# If you run GitLab Enterprise Edition point it to a location where you have downloaded it.
+RUN echo "deb https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/ `lsb_release -cs` main" > /etc/apt/sources.list.d/gitlab_gitlab-ce.list
+RUN wget -q -O - https://packages.gitlab.com/gpg.key | apt-key add -
+RUN apt-get update && apt-get install -yq --no-install-recommends gitlab-ce=7.12.2~omnibus.1-1
+
+# Manage SSHD through runit
 RUN mkdir -p /opt/gitlab/sv/sshd/supervise \
     && mkfifo /opt/gitlab/sv/sshd/supervise/ok \
     && printf "#!/bin/sh\nexec 2>&1\numask 077\nexec /usr/sbin/sshd -D" > /opt/gitlab/sv/sshd/run \
@@ -17,25 +22,12 @@ RUN mkdir -p /opt/gitlab/sv/sshd/supervise \
     && ln -s /opt/gitlab/sv/sshd /opt/gitlab/service \
     && mkdir -p /var/run/sshd
 
-RUN cd /etc/gitlab \
-     && sed -i "s/^.*db_database.*$/gitlab_rails[\'db_database\'] = ENV[\"POSTGRESQL_DATABASE\"]/" gitlab.rb \
-     && sed -i "s/^.*external_url.*$/external_url ENV[\"SITE\"]/" gitlab.rb \
-     && sed -i "s/^.*db_encoding.*$/gitlab_rails[\'db_encoding\'] = unicode/" gitlab.rb \
-     && sed -i "s/^.*db_pool.*$/gitlab_rails[\'db_pool\'] = 10/" gitlab.rb \
-     && sed -i "s/^.*db_username.*$/gitlab_rails[\'db_username\'] = ENV[\"POSTGRESQL_USERNAME\"]/" gitlab.rb \
-     && sed -i "s/^.*db_password.*$/gitlab_rails[\'db_password\'] = ENV[\"POSTGRESQL_PASSWORD\"]/" gitlab.rb \
-     && sed -i "s/^.*db_host.*$/gitlab_rails[\'db_host\'] = ENV[\"POSTGRESQL_ADDRESS\"]/" gitlab.rb \
-     && sed -i "s/^.*db_port.*$/gitlab_rails[\'db_port\'] = \"5432\"/" gitlab.rb \ 
-     && sed -i "s/^.*db_adapter.*$/gitlab_rails[\'db_adapter\'] = "postgresql"/" gitlab.rb \     
-     && sed -i "s/^.*postgresql\['enable'\].*$/postgresql[\'enable\'] = false/" gitlab.rb \ 
-     && sed -i "s/^.*redis\['enable'\].*$/redis[\'enable\'] = false/" gitlab.rb \
-     && sed -i "s/^.*redis_host.*$/gitlab_rails[\'redis_host\'] = ENV[\"REDIS_ADDRESS\"]/" gitlab.rb \
-     && sed -i "s/^.*redis_port.*$/gitlab_rails[\'redis_port\'] = "6379"/" gitlab.rb
-
 # Expose web & ssh
 EXPOSE 80 22
 
-RUN mv /etc/gitlab/gitlab.rb /tmp/gitlab.rb
-COPY database.yml /opt/gitlab/embedded/service/gitlab-rails/config/database.yml
+# Copy assets
+COPY wrapper /usr/local/bin/wrapper
+RUN chmod 700 /usr/local/bin/wrapper
 
-CMD sleep 3 && mv /tmp/gitlab.rb /etc/gitlab/gitlab.rb && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
+# Wrapper to handle signal, trigger runit and reconfigure GitLab
+CMD ["/usr/local/bin/wrapper"]
