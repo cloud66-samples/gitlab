@@ -3,3 +3,4 @@
 last_pid=$!
 sleep 180
 kill -KILL $last_pid
+/usr/bin/gitlab-rake gitlab:setup
