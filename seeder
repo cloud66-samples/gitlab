@@ -1,6 +1,10 @@
 #!/bin/bash
+echo "Running wrapper..."
 /usr/local/bin/wrapper &
 last_pid=$!
+echo "Sleeping for 3 minutes..."
 sleep 180
+echo "Killing the wrapper process..."
 kill -KILL $last_pid
+echo "Killed wrapper process, now seeding Gitlab..."
 /usr/bin/gitlab-rake gitlab:setup
