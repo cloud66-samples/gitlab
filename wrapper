@@ -11,8 +11,7 @@ function entrypoint() {
     # Default is to run runit and reconfigure GitLab
     mv /tmp/gitlab.rb /etc/gitlab/gitlab.rb &
     gitlab-ctl reconfigure &
-    /opt/gitlab/embedded/bin/runsvdir-start &
-    wait
+    /opt/gitlab/embedded/bin/runsvdir-start
 }
 
 entrypoint

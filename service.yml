@@ -3,12 +3,17 @@ services:
   gitlab:
     git_url: git://github.com/pkallberg/gitlab
     git_branch: master
+    build_command: sudo gitlab-ctl reconfigure && sudo gitlab-rake gitlab:setup
     ports:
     - container: 80
       http: 80
       https: 443
     - container: 22
       tcp: 10022
+    volumes:
+    - "/var/gitlab/data:/var/opt/gitlab"
+    - "/var/gitlab/logs:/var/log/gitlab"
+    - "/var/gitlab/configurations:/etc/gitlab"
     health:
       type: normal
       endpoint: "/users/sign_in"
@@ -17,10 +22,6 @@ services:
       accept:
       - '200'
       - 300-399
-    volumes:
-    - "/var/gitlab/data:/var/opt/gitlab"
-    - "/var/gitlab/logs:/var/log/gitlab"
-    - "/var/gitlab/configurations:/etc/gitlab"
 databases:
 - postgresql
 - redis

@@ -26,6 +26,8 @@ RUN mkdir -p /opt/gitlab/sv/sshd/supervise \
 # Prepare default configuration
 RUN (echo "" \
      && echo "# Cloud 66 customizations below" \
+     && echo "postgresql['enable'] = false" \
+     && echo "redis['enable'] = false" \
      && echo "gitlab_rails['db_adapter'] = 'postgresql'" \
      && echo "gitlab_rails['db_encoding'] = 'unicode'" \
      && echo "gitlab_rails['db_database'] = ENV[\"POSTGRESQL_DATABASE\"]" \
@@ -35,8 +37,6 @@ RUN (echo "" \
      && echo "gitlab_rails['db_port'] = 5432" \
      && echo "gitlab_rails['redis_host'] = ENV[\"REDIS_ADDRESS\"]" \
      && echo "gitlab_rails['redis_port'] = 6379" \
-     && echo "postgresql['enable'] = false" \
-     && echo "redis['enable'] = false" \
      && echo "gitlab_rails['gitlab_shell_ssh_port'] = 10022" \
      && echo "gitlab_rails['gitlab_ssh_host'] = ENV[\"SITE\"]") >> /etc/gitlab/gitlab.rb
 
