@@ -1,0 +1,5 @@
+#!/bin/bash
+/usr/local/bin/wrapper &
+last_pid=$!
+sleep 180
+kill -KILL $last_pid
