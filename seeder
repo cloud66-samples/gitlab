@@ -1,9 +1,12 @@
 #!/bin/bash
-# Running wrapper to prepare config
-nohup /usr/local/bin/wrapper &>/dev/null &
-# Capture wrapper pid
+
+# prepare gitlab config
+mv /tmp/gitlab.rb /etc/gitlab/gitlab.rb
+# run the configure
+gitlab-ctl reconfigure &>/dev/null &
+# capture reconfigure pid
 last_pid=$!
-# Sleep for 120 secs (for config to complete)
+# sleep for config to complete
 sleep 180
 # seed db
 echo yes | /usr/bin/gitlab-rake gitlab:setup
