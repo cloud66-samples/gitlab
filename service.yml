@@ -1,9 +1,9 @@
 ---
 services:
   gitlab:
-    git_url: git://github.com/pkallberg/gitlab
+    git_url: git://github.com/cloud66-samples/gitlab
     git_branch: master
-    build_command: sudo gitlab-ctl reconfigure && sudo gitlab-rake gitlab:setup
+    build_command: seeder
     ports:
     - container: 80
       http: 80
@@ -25,4 +25,3 @@ services:
 databases:
 - postgresql
 - redis
-
