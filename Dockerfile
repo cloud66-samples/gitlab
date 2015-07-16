@@ -41,7 +41,7 @@ RUN (echo "" \
      && echo "gitlab_rails['gitlab_ssh_host'] = ENV[\"SITE\"]") >> /etc/gitlab/gitlab.rb
 
 # Expose web & ssh
-EXPOSE 80 443 22
+# EXPOSE 80 443 22
 
 RUN sed -i "s/^\.*external_url.*$/external_url ENV[\"SITE\"]/" /etc/gitlab/gitlab.rb
 RUN mv /etc/gitlab/gitlab.rb /tmp/gitlab.rb
@@ -51,4 +51,4 @@ COPY wrapper seeder killtree /usr/local/bin/
 RUN chmod 700 /usr/local/bin/wrapper /usr/local/bin/seeder /usr/local/bin/killtree
 
 # Wrapper to handle signal, trigger runit and reconfigure GitLab
-CMD ["/usr/local/bin/wrapper"]
+# CMD ["/usr/local/bin/wrapper"]
