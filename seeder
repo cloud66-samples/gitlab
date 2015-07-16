@@ -4,8 +4,9 @@ nohup /usr/local/bin/wrapper &>/dev/null &
 # Capture wrapper pid
 last_pid=$!
 # Sleep for 120 secs (for config to complete)
-sleep 120
-# remove process tree
-killtree $last_pid
+sleep 180
 # seed db
 echo yes | /usr/bin/gitlab-rake gitlab:setup
+# remove process tree
+killtree $last_pid
+
