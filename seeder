@@ -1,6 +1,6 @@
 #!/bin/bash
 # Running wrapper to prepare config
-nohup /usr/local/bin/wrapper &>/dev/null &
+/usr/local/bin/wrapper &>/dev/null &
 # Capture wrapper pid
 last_pid=$!
 # Sleep for 120 secs (for config to complete)
@@ -8,5 +8,5 @@ sleep 180
 # seed db
 echo yes | /usr/bin/gitlab-rake gitlab:setup
 # remove process tree
-killtree $last_pid
+/usr/local/bin/killtree $last_pid KILL
 
