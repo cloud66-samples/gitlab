@@ -47,7 +47,7 @@ RUN sed -i "s/^\.*external_url.*$/external_url ENV[\"SITE\"]/" /etc/gitlab/gitla
 RUN mv /etc/gitlab/gitlab.rb /tmp/gitlab.rb
 
 # Copy assets
-COPY wrapper seeder kiltree /usr/local/bin/
+COPY wrapper seeder killtree /usr/local/bin/
 RUN chmod 700 /usr/local/bin/wrapper /usr/local/bin/seeder /usr/local/bin/killtree
 
 # Wrapper to handle signal, trigger runit and reconfigure GitLab
