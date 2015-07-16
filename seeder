@@ -1,10 +1,11 @@
 #!/bin/bash
-echo "Running wrapper..."
-/usr/local/bin/wrapper &
+# Running wrapper to prepare config
+nohup /usr/local/bin/wrapper &>/dev/null &
+# Capture wrapper pid
 last_pid=$!
-echo "Sleeping for 3 minutes..."
-sleep 180
-echo "Killing the wrapper process..."
-kill -KILL $last_pid
-echo "Killed wrapper process, now seeding Gitlab..."
-/usr/bin/gitlab-rake gitlab:setup
+# Sleep for 120 secs (for config to complete)
+sleep 120
+# remove process tree
+killtree $last_pid
+# seed db
+echo yes | /usr/bin/gitlab-rake gitlab:setup
