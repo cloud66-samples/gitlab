@@ -8,7 +8,7 @@ echo "run the configure.." >> /var/log/gitlab/seeder.log
 last_pid=$!
 echo "captured reconfigure pid id $last_pid" >> /var/log/gitlab/seeder.log
 echo "sleep for config to complete.." >> /var/log/gitlab/seeder.log
-sleep 180 
+sleep 120 
 echo "seeding db.." >> /var/log/gitlab/seeder.log
 echo yes | /usr/bin/gitlab-rake gitlab:setup
 echo "removing process tree.." >> /var/log/gitlab/seeder.log
