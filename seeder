@@ -1,15 +1,16 @@
 #!/bin/bash
-
-echo "prepare gitlab config.."
-mv /tmp/gitlab.rb /etc/gitlab/gitlab.rb
-echo "run the configure.."
-bin/bash -c "gitlab-ctl reconfigure" >/dev/null 2>&1 &
+touch /var/log/gitlab/seeder.log
+> /var/log/gitlab/seeder.log
+echo "prepare gitlab config.." >> /var/log/gitlab/seeder.log
+mv /tmp/gitlab.rb /etc/gitlab/gitlab.rb 
+echo "run the configure.." >> /var/log/gitlab/seeder.log
+/bin/bash -c "gitlab-ctl reconfigure" >/dev/null 2>&1 &
 last_pid=$!
-echo "captured reconfigure pid id $last_pid"
-echo "sleep for config to complete.."
-sleep 180
-echo "seeding db.."
+echo "captured reconfigure pid id $last_pid" >> /var/log/gitlab/seeder.log
+echo "sleep for config to complete.." >> /var/log/gitlab/seeder.log
+sleep 180 
+echo "seeding db.." >> /var/log/gitlab/seeder.log
 echo yes | /usr/bin/gitlab-rake gitlab:setup
-echo "removing process tree.."
+echo "removing process tree.." >> /var/log/gitlab/seeder.log
 /usr/local/bin/killtree $last_pid KILL
-echo "DONE!"
+echo "DONE!" >> /var/log/gitlab/seeder.log
