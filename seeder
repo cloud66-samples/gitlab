@@ -3,7 +3,7 @@
 # prepare gitlab config
 mv /tmp/gitlab.rb /etc/gitlab/gitlab.rb
 # run the configure
-gitlab-ctl reconfigure >/dev/null 2>&1 &
+bin/bash -c "gitlab-ctl reconfigure" >/dev/null 2>&1 &
 # capture reconfigure pid
 last_pid=$!
 # sleep for config to complete
